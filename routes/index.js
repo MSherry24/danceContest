@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function (req, res) {
-    main.run();
+    main.run(req, res);
 });
 
 module.exports = router;

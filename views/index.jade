@@ -1,7 +1,12 @@
 extends layout
-
 block content
-    script(type='text/javascript', src='../javascripts/index.js')
-    h1= title
-    p Welcome to #{title}
-    button#runButton Run
+    div.jumbotron
+        h1.text-center Dance Battle
+        h2.text-center by Mike Sherry
+    div.container
+        form(action="/", method="post")
+            div.form-group
+                label(for="danceInput") Input
+                textArea#danceInput.form-control(rows="10", name="input")
+            div.form-group
+                button.btn.btn-default(type="submit") Dance!

@@ -4,13 +4,7 @@
 var nodeFactory = require('./nodeFactory');
 var solutionTree = require('./solutionTree');
 
-exports.run = function () {
-    "use strict";
-    return 0;
-};
-
-
-var minimax = function (node) {
+exports.minimax = function (node) {
     "use strict";
     var maxValue, minValue, result, currentChild;
     if (nodeFactory.isLeaf(node)) {

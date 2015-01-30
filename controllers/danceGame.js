@@ -4,6 +4,8 @@
 var solutionTree = require('./solutionTree');
 var nodeFactory = require('./nodeFactory');
 
+
+
 exports.successorFunction = function (node, lastMove) {
     var currentState, children, i, newNode;
     children = [];
