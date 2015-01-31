@@ -3,7 +3,11 @@
  */
 
 var run = function () {
-    $.post('/');
+    var input;
+    input = $("#danceInput").val();
+    $.post('/', { input: input }, function (res) {
+        $('#results').prepend(res.result + '<br>');
+    });
 };
 
 $(document).ready(function () {

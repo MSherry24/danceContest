@@ -8,7 +8,9 @@ router.get('/', function(req, res) {
 });
 
 router.post('/', function (req, res) {
-    main.run(req, res);
+    var result;
+    result = main.run(req, res) === Infinity ? "Win" : "Loss";
+    res.json({result: result});
 });
 
 module.exports = router;

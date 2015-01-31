@@ -1,23 +1,27 @@
 /**
  * Created by Mike on 1/30/2015.
  */
-var solutionTree = require('./solutionTree');
 var nodeFactory = require('./nodeFactory');
 
-
-
-exports.successorFunction = function (node, lastMove) {
-    var currentState, children, i, newNode;
+exports.successorFunction = function (node) {
+    var currentState, children, i, newNode, lastMove, currentMove;
+    lastMove = node.nextMove[1];
     children = [];
-    currentState = solutionTree[node].state;
+    currentState = node.state;
     for (i = 0; i < currentState[lastMove].length; i++) {
         if (currentState[lastMove][i] === false) {
-            newNode = nodeFactory.createNode(node);
-            newNode.state = solutionTree[parent].state;
-            newNode.state[i][lastMove] = true;
-            newNode.state[lastMove][i] = true;
+            currentMove = [lastMove, i];
+            newNode = nodeFactory.createNode(node, currentMove);
             children.push(newNode);
         }
     }
     return children;
+};
+
+exports.evaluate = function (node) {
+    "use strict";
+    if (nodeFactory.isMaxNode(node)) {
+        return -Infinity;
+    }
+    return Infinity;
 };
