@@ -6,7 +6,7 @@ var run = function () {
     var input;
     input = $("#danceInput").val();
     $.post('/', { input: input }, function (res) {
-        $('#results').prepend(res.result + '<br>');
+        $('#results').prepend(res.result.value + " id = " + res.result.id + '<br>');
     });
 };
 

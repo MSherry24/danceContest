@@ -2,14 +2,11 @@
  * Created by Mike on 1/30/2015.
  */
 var id;
+var tree = {};
 
 var getNextId = function () {
     "use strict";
-    if (id === undefined) {
-        id = 0;
-        return id;
-    }
-    return ++id;
+    return id++;
 };
 
 exports.createNode = function (parentNode, move) {
@@ -31,6 +28,7 @@ exports.createNode = function (parentNode, move) {
         score: 0,
         state: state
     };
+    tree[newNode.id] = newNode;
     return newNode;
 };
 
@@ -49,3 +47,7 @@ exports.isLeaf = function (node) {
     return node.children.length === 0;
 };
 
+exports.reset = function () {
+    id = 0;
+    tree = {};
+};

@@ -43,6 +43,7 @@ exports.run = function (req, res) {
     "use strict";
     var rootNode, input, initialState, i, j, lastMove;
     // read in inputs
+    nodeFactory.reset();
     input = parseInput(req.body.input);
     // create initial state array
     initialState = new Array(input.numberOfPossibleMoves);

@@ -25,3 +25,7 @@ exports.evaluate = function (node) {
     }
     return Infinity;
 };
+
+exports.heuristic = function () {
+  return 0;
+};
