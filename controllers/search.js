@@ -2,7 +2,6 @@
  * Created by Mike on 1/30/2015.
  */
 var nodeFactory = require('./nodeFactory');
-var stateVariables = require('./stateVariables');
 var danceGame = require('./danceGame');
 
 /*=================================================================
@@ -23,21 +22,23 @@ exports.minimax = function (node) {
     }
     // If it's a max node, find the max value child
     if (nodeFactory.isMaxNode(node)) {
-        maxValue = { value: -Infinity, id: node.id };
+        maxValue = { value: 0, id: '' };
         while (node.children.length > 0) {
             currentChild = node.children.pop();
             result = this.minimax(currentChild);
-            maxValue = result.value > maxValue.value ? result : maxValue;
+            if (maxValue.value === 0) { maxValue = result; }
+            else {maxValue = result.value > maxValue.value ? result : maxValue; }
         }
         return maxValue;
     }
     // if it's a min node, find the min value child
     if (nodeFactory.isMinNode(node)) {
-        minValue = { value: Infinity, id: node.id };
+        minValue = { value: 0, id: '' };
         while (node.children.length > 0) {
             currentChild = node.children.pop();
             result = this.minimax(currentChild);
-            minValue = result.value < minValue.value ? result : minValue;
+            if (minValue.value === 0) { minValue = result; }
+            else { minValue = result.value < minValue.value ? result : minValue; }
         }
         return minValue;
     }

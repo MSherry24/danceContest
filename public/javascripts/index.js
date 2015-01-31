@@ -3,10 +3,15 @@
  */
 
 var run = function () {
-    var input;
+    var input, trace;
+    trace = '';
     input = $("#danceInput").val();
     $.post('/', { input: input }, function (res) {
-        $('#results').prepend(res.result.value + " id = " + res.result.id + '<br>');
+        $('#results').html(res.result.value);
+        res.result.gameTrace.map(function (step) {
+            trace += step + '<br>';
+        });
+        $('#trace').html(trace);
     });
 };
 

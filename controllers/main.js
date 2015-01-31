@@ -2,7 +2,6 @@
  * Created by Mike on 1/30/2015.
  */
 var nodeFactory = require('./nodeFactory');
-var stateVariables = require('./stateVariables');
 var search = require('./search');
 
 /*=================================================================
@@ -41,9 +40,10 @@ var parseInput = function (inputString) {
 
 exports.run = function (req, res) {
     "use strict";
-    var rootNode, input, initialState, i, j, lastMove;
+    var rootNode, input, initialState, i, j, lastMove, results;
     // read in inputs
     nodeFactory.reset();
+    res = {};
     input = parseInput(req.body.input);
     // create initial state array
     initialState = new Array(input.numberOfPossibleMoves);
@@ -58,17 +58,18 @@ exports.run = function (req, res) {
         initialState[move[0]][move[1]] = true;
         initialState[move[1]][move[0]] = true;
     });
-    // create root node (Opponent's Last Move)
     // get final move from input
     lastMove = [input.movesTaken[input.movesTaken.length - 1][0],
                     input.movesTaken[input.movesTaken.length - 1][1]];
+    // Create root node
     rootNode = nodeFactory.createNode('root', lastMove);
     // initialize root node state
     rootNode.state = initialState;
-    // add the root node and its state to the tree & state objects
-    stateVariables.tree[rootNode.id] = rootNode;
-    stateVariables.gameStates[JSON.stringify(rootNode.state)] = rootNode.id;
-
-    // call minimax run, passing in the root node and the opponent's last move
-    return search.minimax(rootNode);
+    // call minimax run, passing in the root node
+    results = search.minimax(rootNode);
+    // get the win/loss result
+    res.value = results.value;
+    // Trace back the game steps
+    res.gameTrace = nodeFactory.createGameTrace(results.id);
+    return res;
 };
