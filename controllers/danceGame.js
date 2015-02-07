@@ -2,54 +2,64 @@
  * Created by Mike on 1/30/2015.
  */
 var nodeFactory = require('./nodeFactory');
+var maxDepth = 6;
 
 exports.successorFunction = function (node) {
     "use strict";
     var currentState, children, i, newNode, lastMove, currentMove;
-    lastMove = node.nextMove[1];
-    children = [];
-    currentState = node.state;
-    for (i = 0; i < currentState[lastMove].length; i++) {
-        if (currentState[lastMove][i] === false) {
-            currentMove = [lastMove, i];
-            newNode = nodeFactory.createNode(node, currentMove);
-            children.push(newNode);
+    if (node.depth < maxDepth) {
+        lastMove = node.nextMove[1];
+        children = [];
+        currentState = node.state;
+        for (i = 0; i < currentState[lastMove].length; i++) {
+            if (currentState[lastMove][i] === false) {
+                currentMove = [lastMove, i];
+                newNode = nodeFactory.createNode(node, currentMove);
+                children.push(newNode);
+            }
         }
+        return children;
     }
-    //children.sort(comparator);
-    return children;
+    return [];
 };
 
 exports.evaluate = function (node) {
     "use strict";
-    if (nodeFactory.isMaxNode(node)) {
-        return -Infinity;
+    // if there are no children before the max depth is reached,
+    // the state is a true leaf and should be evaluated for a true
+    // win or loss.
+    if (node.depth < maxDepth) {
+        if (nodeFactory.isMaxNode(node)) {
+            return -Infinity;
+        }
+        return Infinity;
     }
-    return Infinity;
+    // Otherwise a heuristic function is used to estimate the node's
+    // score.
+    return heuristicScore(node);
 };
 
-var heuristic1 = function (state, move) {
+var heuristicScore = function (node) {
     "use strict";
-    // rows with more closed moves score lower
-    var row, score;
-    row = move[1];
-    score = 0;
-    state[row].map(function (x) {
-        score = x ? score : score  + 1;
+    var legalMovesLeft, i, j;
+    legalMovesLeft = 0;
+    i = 0;
+    // Add up the number of legal moves left on the board (node.state[i][j] === false)
+    node.state.map(function (row) {
+        j = 0;
+        row.map(function (element) {
+            // if i < j, that move has already been counted once since the order of the moves
+            // does not matter.
+            if (!element && i >= j) {
+                legalMovesLeft++;
+            }
+            j++;
+        });
+        i++;
     });
-    return score;
-};
-
-var comparator = function (a, b) {
-    "use strict";
-    var aScore, bScore, aCache, bCache;
-    aCache = nodeFactory.checkCache(a);
-    bCache = nodeFactory.checkCache(b);
-    if (aCache && !bCache) { return 1; }
-    if (bCache && !aCache) { return -1; }
-    //aScore = heuristic1(a.state, a.nextMove);
-    //bScore = heuristic1(b.state, b.nextMove);
-    //if (aScore > bScore) { return -1; }
-    //return 1;
-    return 0;
+    // Give priority to boards with an odd number of legal moves left
+    if (legalMovesLeft % 2 !== 0) {
+        legalMovesLeft *= 10;
+    }
+    return legalMovesLeft;
 };

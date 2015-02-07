@@ -1,0 +1,21 @@
+DanceBattle is a node.js application that runs the minimax algorithm to determine who will win a dance battle where there
+are a set number of dance moves, each player must repeat the previous player's second dance move as their first move
+and then add a second move of their choice.  Dance move combos cannot be repeated.  This continues until there are no
+legal combos left for a dancer.
+
+The input is in the format
+#
+#
+# #
+# #
+Where the first row is the number of legal moves
+The second row is the number of moves entered by the user
+every row after the second row represents the first moves
+made by each dancer in the contest
+
+Example inputs can be found in textInput.txt
+
+Once Node.js is set up on your local machine, on the command line, navigate to the root directory which should
+contain app.js, package.json, and your project files.  Type "npm start", open a browser, and navigate to "localhost:3000".
+
+Alternately, the current version of this app can be viewed and used at https://secure-ridge-7720.herokuapp.com/

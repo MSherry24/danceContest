@@ -2,6 +2,7 @@
  * Created by Mike on 1/30/2015.
  */
 var nodeFactory = require('./nodeFactory');
+var danceGame = require('./danceGame');
 var search = require('./search');
 
 /*=================================================================
@@ -31,43 +32,60 @@ var parseInput = function (inputString) {
 };
 
 /*=================================================================
+ * createInitialState
+ * Takes the total number of moves and the moves already taken and
+ * returns a 2D array of booleans with the already used moves marked
+ * as true while the rest of the array elements are false.
+ ===================================================================*/
+var createInitialState = function (numberOfPossibleMoves, movesTaken) {
+    "use strict";
+    var initialState, i, j;
+    initialState = new Array(numberOfPossibleMoves);
+    for (i = 0; i < numberOfPossibleMoves; i++) {
+        initialState[i] = new Array(numberOfPossibleMoves);
+        for (j = 0; j < numberOfPossibleMoves; j++) {
+            initialState[i][j] = false;
+        }
+    }
+    // mark off previous used move combinations
+    movesTaken.map(function (move) {
+        initialState[move[0]][move[1]] = true;
+        initialState[move[1]][move[0]] = true;
+    });
+    return initialState;
+};
+
+/*=================================================================
  * run
  * Takes the request from the browser,
  * parses out user input,
  * creates the initial node & game state,
  * calls minimax algorithm
  ===================================================================*/
-
 exports.run = function (req, res) {
     "use strict";
-    var rootNode, input, initialState, i, j, lastMove;
-    // read in inputs
+    var rootNode, input, initialState, lastMove;
+    // Reset the node factory fields in case this is not the first run.
     nodeFactory.reset();
-    res = {};
     input = parseInput(req.body.input);
     // create initial state array
-    initialState = new Array(input.numberOfPossibleMoves);
-    for (i = 0; i < input.numberOfPossibleMoves; i++) {
-        initialState[i] = new Array(input.numberOfPossibleMoves);
-        for (j = 0; j < input.numberOfPossibleMoves; j++) {
-            initialState[i][j] = false;
-        }
-    }
-    // mark off previous used move combinations
-    input.movesTaken.map(function (move) {
-        initialState[move[0]][move[1]] = true;
-        initialState[move[1]][move[0]] = true;
-    });
+    initialState = createInitialState(input.numberOfPossibleMoves, input.movesTaken);
     // get final move from input
-    lastMove = [input.movesTaken[input.movesTaken.length - 1][0],
-                    input.movesTaken[input.movesTaken.length - 1][1]];
+    lastMove = [
+        input.movesTaken[input.movesTaken.length - 1][0],
+        input.movesTaken[input.movesTaken.length - 1][1]
+    ];
     // Create root node
     rootNode = nodeFactory.createNode('root', lastMove);
     // initialize root node state
     rootNode.state = initialState;
-    // call minimax run, passing in the root node
-    res = search.run(rootNode, input.movesTaken);
-    nodeFactory.printId();
+    // call minimax run, passing in the root node and the moves provided in the input
+    res = search.searchHelper(rootNode, input.movesTaken);
     return res;
 };
+
+
+
+
+
 
