@@ -7,8 +7,8 @@ var run = function () {
     trace = '';
     input = $("#danceInput").val();
     $.post('/', { input: input }, function (res) {
-        $('#results').html(res.result.value);
-        res.result.gameTrace.map(function (step) {
+        $('#results').html(res.whoWon);
+        res.movesTaken.map(function (step) {
             trace += step + '<br>';
         });
         $('#trace').html(trace);

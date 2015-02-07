@@ -10,8 +10,7 @@ router.get('/', function(req, res) {
 router.post('/', function (req, res) {
     var result;
     result = main.run(req, res);
-    result.value = result.value === Infinity ? "Win" : "Loss";
-    res.json({result: result});
+    res.json(result);
 });
 
 module.exports = router;

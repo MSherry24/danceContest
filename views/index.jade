@@ -4,14 +4,18 @@ block content
         h1.text-center Dance Battle
         h2.text-center by Mike Sherry
     div.container
+        div.row.text-center
+            button#runButton.btn.btn-default.btn-success(type="submit") Dance!
+        br
+        br
         div.row
-            label(for="danceInput") Input
-            textArea#danceInput.form-control(rows="10", name="input")
+            div.col-xs-4.text-center.h4 Input
+            div.col-xs-4
+            div.col-xs-4
         div.row
-            button#runButton.btn.btn-default(type="submit") Dance!
-    div.container
-        div.row
-            div.col-xs-6
+            div.col-xs-4
+                textArea#danceInput.form-control(rows="10", name="input")
+            div.col-xs-4
                 div#results.col-xs-12.well
-            div.col-xs-6
+            div.col-xs-4
                 div#trace.col-xs-12.well

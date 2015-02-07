@@ -3,15 +3,16 @@
  */
 var id;
 var tree = {};
+var stateCache = {};
 
 var getNextId = function () {
     "use strict";
     return id++;
 };
 
-var deepCopy = function (inputArray) {
+exports.deepCopy = function (inputArray) {
     "use strict";
-    var length, newArray, i, j;
+    var length, newArray, i;
     newArray = [];
     length = inputArray.length;
     for (i = 0; i < length; i++) {
@@ -25,7 +26,7 @@ exports.createNode = function (parentNode, move) {
     var newNode, depth, parent, state;
     depth = parentNode === 'root' ? 0 : parentNode.depth + 1;
     parent = parentNode === 'root' ? 'root' : parentNode.id;
-    state = parentNode === 'root' ? [] : deepCopy(parentNode.state);
+    state = parentNode === 'root' ? [] : this.deepCopy(parentNode.state);
     if (parentNode !== 'root') {
         state[move[0]][move[1]] = true;
         state[move[1]][move[0]] = true;
@@ -61,6 +62,7 @@ exports.isLeaf = function (node) {
 exports.reset = function () {
     id = 0;
     tree = {};
+    stateCache = {};
 };
 
 exports.createGameTrace = function (leafNodeId) {
@@ -72,4 +74,14 @@ exports.createGameTrace = function (leafNodeId) {
         currentNode = tree[currentNode.parent];
     }
     return gameSteps.reverse();
+};
+
+exports.getNextMove = function (leafNodeId) {
+    var currentNode, gameSteps;
+    gameSteps = [];
+    currentNode = tree[leafNodeId];
+    while (tree[currentNode.parent].parent !== 'root') {
+        currentNode = tree[currentNode.parent];
+    }
+    return currentNode;
 };

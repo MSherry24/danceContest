@@ -40,7 +40,7 @@ var parseInput = function (inputString) {
 
 exports.run = function (req, res) {
     "use strict";
-    var rootNode, input, initialState, i, j, lastMove, results;
+    var rootNode, input, initialState, i, j, lastMove;
     // read in inputs
     nodeFactory.reset();
     res = {};
@@ -66,10 +66,8 @@ exports.run = function (req, res) {
     // initialize root node state
     rootNode.state = initialState;
     // call minimax run, passing in the root node
-    results = search.minimax(rootNode);
-    // get the win/loss result
-    res.value = results.value;
-    // Trace back the game steps
-    res.gameTrace = nodeFactory.createGameTrace(results.id);
+    res = search.run(rootNode, input.movesTaken);
+    nodeFactory.printId();
     return res;
 };
+
